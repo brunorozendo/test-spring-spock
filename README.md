@@ -1,12 +1,12 @@
 # User CRUD Application
 
-A simple Quarkus application that provides CRUD operations for a User entity.
+A simple Spring Boot application that provides CRUD operations for a User entity.
 
 ## Technologies Used
 
-- Quarkus 3.21.3
-- Hibernate ORM with Panache
-- RESTEasy Reactive
+- Spring Boot 3.4.5
+- Spring Data JPA
+- Spring Web
 - H2 Database
 - Gradle
 - Spock Framework for testing
@@ -36,6 +36,8 @@ src
             └── example
                 ├── controller
                 │   └── UserControllerSpec.groovy
+                ├── repository
+                │   └── UserRepositorySpec.groovy
                 └── service
                     └── UserServiceSpec.groovy
 ```
@@ -49,7 +51,7 @@ src
 ## Running the Application
 
 ```bash
-./gradlew quarkusDev
+./gradlew bootRun
 ```
 
 The application will start on port 8080.
@@ -172,7 +174,7 @@ Use the following credentials:
 ./gradlew test
 ```
 
-This will run both the JUnit tests and Spock tests.
+This will run all the Spock tests. The test results can be found in the `build/reports/tests/test` directory, and Spock-specific reports are available in the `build/spock-reports` directory.
 
 ## Sample User JSON
 
