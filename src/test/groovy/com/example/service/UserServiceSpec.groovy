@@ -118,4 +118,38 @@ class UserServiceSpec extends Specification {
         userService.existsById(1L)
         !userService.existsById(2L)
     }
+
+    /**
+     * Test that verifies the findByEmail method correctly retrieves a user by email.
+     * It ensures that the service returns the user when found.
+     */
+    def "should find user by email when user exists"() {
+        given: "a user and a mocked repository response for findByEmail"
+        def user = new User("John Doe", "john@example.com", "1234567890")
+        userRepository.findByEmail("john@example.com") >> user
+
+        when: "the findByEmail method is called with an existing email"
+        def result = userService.findByEmail("john@example.com")
+
+        then: "the result should be the user"
+        result == user
+        result.name == "John Doe"
+        result.email == "john@example.com"
+        result.phone == "1234567890"
+    }
+
+    /**
+     * Test that verifies the findByEmail method correctly handles the case when a user is not found.
+     * It ensures that the service returns null when the repository returns null.
+     */
+    def "should return null when finding by email that does not exist"() {
+        given: "a mocked repository response returning null for findByEmail"
+        userRepository.findByEmail("nonexistent@example.com") >> null
+
+        when: "the findByEmail method is called with an email that doesn't exist"
+        def result = userService.findByEmail("nonexistent@example.com")
+
+        then: "the result should be null"
+        result == null
+    }
 }

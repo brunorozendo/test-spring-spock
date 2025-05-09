@@ -6,6 +6,7 @@ plugins {
     id 'java'
     id 'groovy' // For Spock tests
     id 'com.github.johnrengelman.shadow' version '8.1.1' // Plugin to find duplicated classes
+    id 'jacoco' // For code coverage
 }
 
 group = 'com.example'
@@ -112,4 +113,45 @@ tasks.register('checkDuplicateClasses') {
 
 test{
     useJUnitPlatform()
+    testLogging {
+        //events "FAILED","PASSED","SKIPPED","STANDARD_ERROR","STANDARD_OUT","STARTED"
+        events "FAILED","PASSED","SKIPPED"
+    }
+    finalizedBy jacocoTestReport // Generate report after tests run
+}
+
+// JaCoCo configuration
+jacoco {
+    toolVersion = "0.8.11" // Use the latest version of JaCoCo
+}
+
+jacocoTestReport {
+    dependsOn test // Tests are required to run before generating the report
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.5 // Minimum code coverage of 50%
+            }
+        }
+    }
+}
+
+// Task to check code coverage
+task checkCoverage {
+    dependsOn test
+    dependsOn jacocoTestReport
+    dependsOn jacocoTestCoverageVerification
+
+    doLast {
+        println "Code coverage verification completed."
+    }
 }

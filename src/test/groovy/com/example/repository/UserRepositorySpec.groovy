@@ -59,7 +59,11 @@ class UserRepositorySpec extends Specification {
      */
     def "should return true when checking if user exists by id"() {
         given: "a user saved in the repository"
-        def user = new User("Jane Doe", "jane@example.com", "987654321")
+        def user = new User()
+        user.name = "Jane Doe"
+        user.email = "jane@example.com"
+        user.phone = "987654321"
+
         userRepository.save(user)
 
         when: "existsById is called with the user's ID"
